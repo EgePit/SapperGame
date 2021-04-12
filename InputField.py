@@ -8,11 +8,11 @@ class InputField:
     is_active = False
     value = ''
 
-    def __init__(self, screen, label, name, coords=(100, 100), width=200, height=32):
+    def __init__(self, screen, label, name, coordinates=(100, 100), width=200, height=32):
         """
         :param screen: window where to draw 
         :param name: field name
-        :param coords: (x,y) field coordinates
+        :param coordinates: (x,y) field coordinates
         :param width: field width
         :param height: field height
         """
@@ -23,9 +23,13 @@ class InputField:
         self.height = height
         self.main_font = pg.font.Font(None, 32)
         self.label_font = pg.font.Font(None, 25)
-        self.input_field = pg.Rect(coords, (self.width, self.height))
+        self.input_field = pg.Rect(coordinates, (self.width, self.height))
 
     def draw(self):
+        """
+        Field Drawing
+        :return: Null
+        """
         label_surface = self.label_font.render(self.label, True, self.text_color)
         self.screen.blit(label_surface, (self.input_field.x, self.input_field.y - self.label_font.get_linesize()))
 
@@ -36,16 +40,23 @@ class InputField:
         self.screen.blit(text_surface, (self.input_field.x + 5, self.input_field.y + 5))
 
     def set_active(self, status):
+        """
+        :param status: bool set field status
+        :return: Null
+        """
         self.is_active = status
 
-    def type(self):
-        pass
+    def get_status(self):
+        return self.is_active
 
-    # def event_handler(self):
-    #     for event in pg.event.get():
-    #         if event.type == pg.MOUSEBUTTONDOWN:
-    #             print(123)
-    #             if self.input_field.collidepoint(event.pos):
-    #                 self.set_active(True)
-    #             else:
-    #                 self.set_active(False)
+    def type(self, event):
+        """
+        Changing field text
+        :param event: pygame keydown event
+        :return: Null
+        """
+        if event.key == pg.K_BACKSPACE:
+            self.value = self.value[:-1]
+        else:
+            self.value += event.unicode
+
